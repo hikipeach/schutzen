@@ -1,5 +1,6 @@
 import json
 import bcrypt
+from key import decrypt_vault
 
 def login():
     """
@@ -12,7 +13,6 @@ def login():
         entered, master = get_hashed_passwords()
         if is_verified(entered, master):
             print("verification successful.")
-            logged_in = True
             return True
         else:
             print("verification unsuccessful.")
@@ -30,9 +30,8 @@ def is_verified(hashed_entered_password: bytes, hashed_master_password: bytes):
 def get_hashed_passwords():
     entered_password = input("enter your master password: ")
     # get the data from the json file
-    with open('vault.json', 'r') as f:
-        data = json.load(f)
-    print(data)
+    vault = decrypt_vault().decode('utf-8')
+    data = json.loads(vault)
     # encode salt and master password to utf-8
     salt = data["salt"].encode('utf-8')
     hashed_master_password = data["hashed_password"].encode('utf-8')
@@ -41,4 +40,3 @@ def get_hashed_passwords():
     hashed_entered_password = bcrypt.hashpw(entered_password_bytes, salt)
     return hashed_entered_password, hashed_master_password
 
-login()

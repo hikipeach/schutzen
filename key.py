@@ -23,3 +23,12 @@ def encrypt_vault():
     with open('vault.json', 'wb') as enc_vault_json:
         enc_vault_json.write(encrypted_vault)
     enc_vault_json.close()
+
+def decrypt_vault():
+    key = get_encryption_key()
+    f = Fernet(key)
+    with open('vault.json', 'rb') as enc_vault_json:
+        encrypted_vault = enc_vault_json.read()
+    vault = f.decrypt(encrypted_vault)
+    enc_vault_json.close()
+    return vault
