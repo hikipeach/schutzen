@@ -21,19 +21,16 @@ class Credential:
       if website != self.website:
           print("error: website not found")
       else:
-          password = 'a'
-          confirmed_password = 'b'
-          while password != confirmed_password:
-              account_list = self.account[self.website]
-              username = input(f"enter your username for {self.website}: ")
-              password = input(f"enter your password for {self.website}: ")
-              confirmed_password = input(f"confirm your password for {self.website}: ")
-              if password != confirmed_password:
-                  print("error: passwords do not match")
-              else:
-                credential = {username: password}
-                account_list.append(credential)
-                print(f"added account {username} for {self.website}")
+        account_list = self.account[self.website]
+        username = input(f"enter your username for {self.website}: ")
+        password = input(f"enter your password for {self.website}: ")
+        confirmed_password = input(f"confirm your password for {self.website}: ")
+        if password != confirmed_password:
+          print("error: passwords do not match")
+        else:
+          credential = {username: password}
+          account_list.append(credential)
+          print(f"added account {username} for {self.website}")
 
   def change_website(self, website):
       if self.website != website:
@@ -100,8 +97,18 @@ class Credential:
         del self.account[self.website][username_idx]
         print(f"account with the username {username} been deleted.")
 
-
-x = Credential('google.com', 'joe@gmail.com', 'joe1234')
-print(x.to_string())
-x.delete_account('joe@gmail.com')
-print(x.to_string())
+  def clear_accounts(self, website):
+      """
+      Deletes all accounts associated with a website
+      """
+      if website != self.website:
+          print("error: invalid website")
+      else:
+          print("warning: this deletes all your accounts associated with the website")
+          confirm_delete = input("are you sure you want to delete them? for yes enter 'y' or any other key for no: ").lower()
+          if confirm_delete != 'y':
+              print(f"no changes made to {website}")
+          else:
+            print(self.account[self.website])
+            self.account[self.website].clear()
+            print(f"all accounts have been deleted for {website}")
