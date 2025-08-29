@@ -69,7 +69,39 @@ class Credential:
   def change_password(self, username, new_password):
       username_idx = self.find_username(username)
       if username_idx == -1:
-          print("username not found.")
+          print("error: username not found.")
       else:
-          self.account[self.website][username_idx][username] = new_password
-          print(f"password changed to {new_password}.")
+          confirmed_password = input("confirm your new password: ")
+          if confirmed_password == new_password:
+              self.account[self.website][username_idx][username] = new_password
+              print(f"password changed to {new_password}.")
+          else:
+              print("error: unable to change password. passwords do not match.")
+
+  def get_password(self, username):
+      """displays password for a valid username"""
+      username_idx = self.find_username(username)
+      if username_idx == -1:
+          return ''
+      else:
+          return self.account[self.website][username_idx][username]
+
+  def display_password(self, username):
+      if self.get_password(username) == '':
+          print("username {username} does not exist.")
+      else:
+          print(f"password for {username} is {self.get_password(username)}")
+
+  def delete_account(self, username):
+      username_idx = self.find_username(username)
+      if username_idx == -1:
+          print("error: username does not exist")
+      else:
+        del self.account[self.website][username_idx]
+        print(f"account with the username {username} been deleted.")
+
+
+x = Credential('google.com', 'joe@gmail.com', 'joe1234')
+print(x.to_string())
+x.delete_account('joe@gmail.com')
+print(x.to_string())
