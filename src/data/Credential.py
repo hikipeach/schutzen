@@ -64,4 +64,12 @@ class Credential:
       else:
           account = self.account[self.website][username_idx].pop(previous_username)
           self.account[self.website][username_idx][new_username] = account
-          print(f"previous username {previous_username} has been changed to {new_username}")
+          print(f"username changed to {new_username}")
+
+  def change_password(self, username, new_password):
+      username_idx = self.find_username(username)
+      if username_idx == -1:
+          print("username not found.")
+      else:
+          self.account[self.website][username_idx][username] = new_password
+          print(f"password changed to {new_password}.")
