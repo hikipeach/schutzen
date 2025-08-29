@@ -8,11 +8,13 @@ class Credential:
      """
      Displays the account details
      """
+     credential_string = ""
      account_list = self.account[self.website]
      for i in range(0, len(account_list)):
          for k, v in account_list[i].items():
-             print(f"website: {self.website}")
-             print(f"username: {k}\npassword: {v}\n")
+             credential_string += f"website: {self.website}\n"
+             credential_string += f"username: {k}\npassword: {v}\n"
+     return credential_string
 
   def add_account(self, website):
       """Adds an account to existing website"""
@@ -41,15 +43,25 @@ class Credential:
           new_website = input("enter the new website url: ")
           self.website = new_website
           self.account[self.website] = old_credential
-          print(f"website '{website}' has been changed to '{new_website}'")
+          print(f"previous website '{website}' has been changed to '{new_website}'")
 
-"""
-  def change_username(self, username):
+  def find_username(self, username: str):
       account_list = self.account[self.website]
-      #find the index of the key that matches username
-"""
+      for i in range(0, len(account_list)):
+          for k, v in account_list[i].items():
+              if username == k:
+                  return i
+          else:
+              return -1
 
-x = Credential('google.com', 'joe@gmail.com', 'joe1234')
-x.to_string()
-x.change_website('google.com')
-x.to_string()
+  def change_username(self, previous_username, new_username):
+      """
+      Changes a previous username to a new username
+      """
+      username_idx = self.find_username(previous_username)
+      if username_idx == -1:
+          print("username not found.")
+      else:
+          account = self.account[self.website][username_idx].pop(previous_username)
+          self.account[self.website][username_idx][new_username] = account
+          print(f"previous username {previous_username} has been changed to {new_username}")
