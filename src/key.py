@@ -49,6 +49,7 @@ def decrypt_vault():
     key = get_encryption_key()
     f = Fernet(key)
 
+
     logger.info("Opening file for reading encrypted vault")
     with open('vault.json', 'rb') as enc_vault_json:
         encrypted_vault = enc_vault_json.read()
