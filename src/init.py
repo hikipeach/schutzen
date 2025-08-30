@@ -7,7 +7,6 @@ from utility import vault_exists
 from key import create_encryption_key, encrypt_vault
 
 logger = logging.getLogger(__name__)
-logging.basicConfig(filename='schutzen.log', encoding='utf-8', level=logging.INFO, format='%(levelname)s:%(message)s %(asctime)s', datefmt='%m/%d/%Y %I:%M:%S %P')
 
 def init():
   """

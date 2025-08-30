@@ -3,7 +3,7 @@ import logging
 from cryptography.fernet import Fernet
 
 logger = logging.getLogger(__name__)
-logging.basicConfig(filename='schutzen.log', encoding='utf-8', level=logging.INFO)
+
 def create_encryption_key():
   key = Fernet.generate_key()
   logger.info("Key generation complete.")

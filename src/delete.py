@@ -4,7 +4,6 @@ from login import get_hashed_passwords
 from utility import vault_exists
 
 logger = logging.getLogger(__name__)
-logging.basicConfig(filename="schutzen.log", filemode="utf-8", level=logging.ERROR, format='%(levelname)s:%(message)s %(asctime)s', datefmt='%m/%d/%Y %I:%M:%S %P')
 
 def delete():
   """

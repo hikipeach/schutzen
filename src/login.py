@@ -5,7 +5,6 @@ import logging
 from src.key import decrypt_vault
 
 logger = logging.getLogger(__name__)
-logging.basicConfig(filename='schutzen.log', encoding='utf-8', level=logging.INFO)
 
 def login():
     """
