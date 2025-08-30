@@ -1,6 +1,8 @@
 import json
 import bcrypt
-from key import decrypt_vault
+
+from src.key import decrypt_vault
+
 
 def login():
     """
@@ -19,6 +21,8 @@ def login():
             print(f"attempts left {MAX_ATTEMPT - current_attempt}")
             current_attempt += 1
             logged_in = False
+    print("error: incorrect master password")
+    print("quitting...")
     return False
 
 def is_verified(hashed_entered_password: bytes, hashed_master_password: bytes):

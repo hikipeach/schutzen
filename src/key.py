@@ -4,11 +4,11 @@ from cryptography.fernet import Fernet
 
 def create_encryption_key():
   key = Fernet.generate_key()
-  with open('key.env', 'wb') as vault_key:
+  with open('../config/key.env', 'wb') as vault_key:
     vault_key.write(key)
 
 def get_encryption_key():
-  with open('key.env', 'rb') as vault_key:
+  with open('../config/key.env', 'rb') as vault_key:
     key = vault_key.read()
   vault_key.close()
   return key
