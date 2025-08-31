@@ -27,10 +27,3 @@ async def clear_password():
   await asyncio.sleep(30)
   pyperclip3.clear()
   return pyperclip3.paste()
-
-async def logout():
-  """
-  Logs the user out after 5 minutes
-  """
-  await asyncio.sleep(300)
-  print("logging user out (5 minutes has passed).")
