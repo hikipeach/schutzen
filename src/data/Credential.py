@@ -1,8 +1,14 @@
+import logging
+from src import utility
+
+logger = logging.getLogger(__name__)
+
 class Credential:
   """Represents the credentials the user would like to store for a given website"""
   def __init__(self, website, username, password):
+    encrypted_password = utility.encrypt_password(password)
     self.website = website
-    self.account = {website: [{username: password}]}
+    self.account = {website: [{username: encrypted_password}]}
 
   def to_string(self) -> str:
      """
@@ -28,7 +34,8 @@ class Credential:
         if password != confirmed_password:
           print("error: passwords do not match")
         else:
-          credential = {username: password}
+          encrypted_password = utility.encrypt_password(password)
+          credential = {username: encrypted_password}
           account_list.append(credential)
           print(f"added account {username} for {self.website}")
 
@@ -48,8 +55,8 @@ class Credential:
           for k, v in account_list[i].items():
               if username == k:
                   return i
-          else:
-              return -1
+
+      return -1
 
   def change_username(self, previous_username, new_username):
       """
@@ -70,8 +77,9 @@ class Credential:
       else:
           confirmed_password = input("confirm your new password: ")
           if confirmed_password == new_password:
-              self.account[self.website][username_idx][username] = new_password
-              print(f"password changed to {new_password}.")
+              encrypted_password = utility.encrypt_password(new_password)
+              self.account[self.website][username_idx][username] = encrypted_password
+              print(f"password changed.")
           else:
               print("error: unable to change password. passwords do not match.")
 
@@ -79,9 +87,12 @@ class Credential:
       """displays password for a valid username"""
       username_idx = self.find_username(username)
       if username_idx == -1:
+          logger.info("Unable to find username.")
           return ''
       else:
-          return self.account[self.website][username_idx][username]
+          password = self.account[self.website][username_idx][username]
+          decrypted_password = utility.decrypt_password(password)
+          return decrypted_password
 
   def display_password(self, username):
       if self.get_password(username) == '':
@@ -95,6 +106,7 @@ class Credential:
           print("error: username does not exist")
       else:
         del self.account[self.website][username_idx]
+        logger.info(f"User deleted an account associated with website: {self.website}")
         print(f"account with the username {username} been deleted.")
 
   def clear_accounts(self, website):
@@ -111,4 +123,5 @@ class Credential:
           else:
             print(self.account[self.website])
             self.account[self.website].clear()
+            logger.info(f"User deleted all accounts associated with {self.website}")
             print(f"all accounts have been deleted for {website}")

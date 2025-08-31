@@ -1,7 +1,9 @@
 import os
 import pyperclip3
-import time
 import asyncio
+
+from cryptography.fernet import Fernet
+from src import key
 
 def vault_exists():
   """
@@ -27,3 +29,19 @@ async def clear_password():
   await asyncio.sleep(30)
   pyperclip3.clear()
   return pyperclip3.paste()
+
+
+def encrypt_password(password):
+  """
+  Encrypts password using symmetric encryption
+  """
+  f = Fernet(key.get_encryption_key())
+  byte = password.encode('utf-8')
+  return f.encrypt(byte)
+
+def decrypt_password(password):
+  """
+  Decrypts password using symmetric encryption
+  """
+  f = Fernet(key.get_encryption_key())
+  return f.decrypt(password).decode()

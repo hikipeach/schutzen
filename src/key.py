@@ -1,14 +1,19 @@
 # Module for key functions to read/write, encrypting and decrypting vault
 import logging
+from pathlib import Path
+
 from cryptography.fernet import Fernet
 
 logger = logging.getLogger(__name__)
+
+root = Path(__file__).parent.parent
+key_dir = root / 'config' / 'key.env'
 
 def create_encryption_key():
   key = Fernet.generate_key()
   logger.info("Key generation complete.")
 
-  with open('../config/key.env', 'wb') as vault_key:
+  with open(key_dir, 'wb') as vault_key:
     vault_key.write(key)
 
   logger.info("Writing complete. Closing file.")
@@ -16,7 +21,7 @@ def create_encryption_key():
 
 def get_encryption_key():
   logger.info("Opening file for reading encrypted key")
-  with open('../config/key.env', 'rb') as vault_key:
+  with open(key_dir, 'rb') as vault_key:
     logger.info("Reading key...")
     key = vault_key.read()
 
@@ -48,7 +53,6 @@ def encrypt_vault():
 def decrypt_vault():
     key = get_encryption_key()
     f = Fernet(key)
-
 
     logger.info("Opening file for reading encrypted vault")
     with open('vault.json', 'rb') as enc_vault_json:
