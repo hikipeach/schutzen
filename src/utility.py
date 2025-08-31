@@ -45,3 +45,9 @@ def decrypt_password(password):
   """
   f = Fernet(key.get_encryption_key())
   return f.decrypt(password).decode()
+
+async def logout():
+  """
+  Logs out after 2 minutes
+  """
+  await asyncio.sleep(120)
