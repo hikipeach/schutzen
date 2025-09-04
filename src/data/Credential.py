@@ -9,6 +9,7 @@ class Credential:
     encrypted_password = utility.encrypt_password(password)
     self.website = website
     self.account = {website: [{username: encrypted_password}]}
+    utility.store_credential(self)
 
   def to_string(self) -> str:
      """
@@ -38,6 +39,7 @@ class Credential:
           credential = {username: encrypted_password}
           account_list.append(credential)
           print(f"added account {username} for {self.website}")
+          utility.store_credential(self)
 
   def change_website(self, website):
       if self.website != website:
@@ -48,6 +50,7 @@ class Credential:
           self.website = new_website
           self.account[self.website] = old_credential
           print(f"previous website '{website}' has been changed to '{new_website}'")
+          utility.store_new_website(self, website)
 
   def find_username(self, username: str):
       account_list = self.account[self.website]
@@ -55,7 +58,6 @@ class Credential:
           for k, v in account_list[i].items():
               if username == k:
                   return i
-
       return -1
 
   def change_username(self, previous_username, new_username):
@@ -68,6 +70,7 @@ class Credential:
       else:
           account = self.account[self.website][username_idx].pop(previous_username)
           self.account[self.website][username_idx][new_username] = account
+          utility.store_new_username(self, previous_username, new_username)
           print(f"username changed to {new_username}")
 
   def change_password(self, username, new_password):
@@ -125,3 +128,14 @@ class Credential:
             self.account[self.website].clear()
             logger.info(f"User deleted all accounts associated with {self.website}")
             print(f"all accounts have been deleted for {website}")
+
+  def decode_passwords(self):
+    for k, v in self.account.items():
+          arr = self.account[k]
+          for i in range(0, len(arr)):
+              account = self.account[k][i]
+              for u, p in account.items():
+                if type(p) == bytes:
+                    self.account[k][i][u] = p.decode('utf-8')
+    logger.info("Decoded passwords to utf-8 for JSON storage")
+
